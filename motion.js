@@ -1,0 +1,2 @@
+const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
+for(const bubble of document.querySelectorAll('.speech')){bubble.addEventListener('click',()=>{if(reducedMotion.matches||!bubble.animate)return;for(const animation of bubble.getAnimations())animation.cancel();const tilt=getComputedStyle(bubble).getPropertyValue('--tilt').trim();bubble.animate([{transform:'rotate('+tilt+') scale(1)'},{transform:'rotate('+tilt+') translateY(-9px) scale(1.13)',offset:.4},{transform:'rotate('+tilt+') scale(1)'}],{duration:480,easing:'cubic-bezier(.2,.8,.3,1)'});});}
