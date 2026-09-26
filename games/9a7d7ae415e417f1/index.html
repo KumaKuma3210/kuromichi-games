@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#252921">
+  <meta name="description" content="じゃんけんで負けても、合戦で勝て。無茶な逆転命令で天下統一を目指す、縦画面の戦国じゃんけん。">
+  <title>戦国じゃんけん 〜殿、それは反則です！〜</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23252921'/%3E%3Cpath d='M5 8L11 14L16 5L21 14L27 8L25 23H7Z' fill='%23d9af53'/%3E%3Cpath d='M10 25H22' stroke='%23cf4935' stroke-width='4'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <script src="rules.js" defer></script>
+  <script src="art.js" defer></script>
+  <script src="audio.js" defer></script>
+  <script src="game.js" defer></script>
+</head>
+<body>
+  <main id="game" class="game-shell" data-screen="title" aria-label="戦国じゃんけん">
+    <header class="topbar">
+      <span class="wordmark"><span class="crest" aria-hidden="true">三</span> 戦国じゃんけん</span>
+      <div class="top-actions">
+        <button id="mute" class="icon-button" aria-label="音をミュート" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4Z"/><path class="sound-waves" d="M17 8q4 4 0 8M20 5q7 7 0 14"/></svg><span id="mute-text">音あり</span></button>
+        <button id="settings-open" class="icon-button gear" aria-label="音量設定" aria-expanded="false" aria-controls="settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16M8 3v6M16 9v6M10 15v6"/></svg></button>
+      </div>
+    </header>
+
+    <section id="enemy-panel" class="enemy-panel" aria-label="敵軍の情報" hidden>
+      <div class="campaign"><span id="battle-number">第一陣</span><div id="campaign-steps" aria-label="倒した武将 0 / 3"><i class="current">一</i><b></b><i>二</i><b></b><i>三</i></div><span class="enemy-tag">敵軍</span></div>
+      <div class="enemy-heading"><h2 id="enemy-name">岩頭 ごり丸</h2><div class="troop-count enemy-count"><span>兵力</span><div id="enemy-pips" class="pips"></div><strong id="enemy-hp">2</strong></div></div>
+      <div class="enemy-reading"><p id="enemy-quote">「拳ひとつで十分じゃ！」</p><div class="history"><span>直近</span><div id="history-hands"></div></div></div>
+    </section>
+
+    <section id="battlefield" class="battlefield" aria-label="動く合戦の戦場">
+      <canvas id="battle-canvas" aria-hidden="true"></canvas>
+      <div id="title-banner" class="title-banner">
+        <div class="title-eyebrow"><span></span> 命運は、その一手。<span></span></div>
+        <h1><span>戦国</span>じゃんけん</h1>
+        <div class="title-sub">〜 殿、それは反則です！〜</div>
+        <p>じゃんけんで負けても、合戦で勝て。</p>
+      </div>
+      <div id="stage-label" class="stage-label" hidden>いざ、尋常に。</div>
+      <div id="janken-call" class="janken-call" aria-hidden="true" hidden>じゃん</div>
+      <div id="hands" class="hands" hidden aria-label="公開された両軍の手"><div class="hand-reveal own"><span>自軍</span><div id="player-hand-icon"></div><strong id="player-hand-name"></strong></div><b class="versus">対</b><div class="hand-reveal foe"><span>敵軍</span><div id="enemy-hand-icon"></div><strong id="enemy-hand-name"></strong></div></div>
+      <div id="verdict" class="verdict" hidden><strong id="verdict-title"></strong><span id="verdict-sub"></span></div>
+      <div id="force-badge" class="force-badge" hidden>強行軍 · 逆転 75%</div>
+      <div id="battle-toast" class="battle-toast" hidden></div>
+      <div id="result-banner" class="result-banner" hidden>
+        <span id="result-eyebrow">三将、すべて撃破。</span><h2 id="result-title">天下統一</h2>
+        <p id="result-comment">理屈より、殿のひと声。</p>
+        <div class="title-award"><span>あなたの称号</span><strong id="result-award">力技の天下人</strong></div>
+        <div class="result-stats"><div><span>倒した武将</span><strong><b id="result-defeated">3</b><small> / 3人</small></strong></div><div><span>逆転成功</span><strong><b id="result-reversals">0</b><small> 回</small></strong></div></div>
+      </div>
+    </section>
+
+    <section id="title-controls" class="entry-controls">
+      <p class="entry-tip">三人の武将を倒して、天下統一。</p>
+      <button id="start" class="primary-button"><span>出 陣</span><b aria-hidden="true">いざ！</b></button>
+      <p class="under-button">手を選ぶ。負けたら、無茶を言う。</p>
+      <small class="channel-credit">くろみちch</small>
+    </section>
+
+    <section id="play-controls" class="play-controls" hidden aria-label="自軍と操作">
+      <div class="player-status"><div class="troop-count"><span class="own-tag">自軍</span><span>兵力</span><div id="player-pips" class="pips"></div><strong id="player-hp">5</strong></div><div class="morale-meter"><span>士気</span><i></i><i></i><b id="morale-value">0/2</b></div></div>
+      <div class="force-row"><button id="force" class="force-button" disabled>強行軍</button><p id="force-description">兵力を失うと士気＋1。2で発動。</p></div>
+      <div id="choice-controls" class="choice-controls"><p id="choice-hint" class="choice-hint">まずは、この三つから一手！</p><div class="hand-buttons"><button data-hand="0" aria-label="グーを出す"><span class="hand-symbol"></span><strong>グー</strong></button><button data-hand="1" aria-label="チョキを出す"><span class="hand-symbol"></span><strong>チョキ</strong></button><button data-hand="2" aria-label="パーを出す"><span class="hand-symbol"></span><strong>パー</strong></button></div></div>
+      <div id="order-controls" class="order-controls" hidden><p id="retainer-line">殿！ 包囲されました！</p><button id="order" class="order-button"><strong id="order-text">岩で押し通す！</strong><span id="order-rate">逆転成功率 35% · 一度だけ命令</span></button></div>
+      <div id="waiting-controls" class="waiting-controls" hidden><span class="waiting-seal" aria-hidden="true">戦</span><strong id="waiting-text">いざ、勝負！</strong><span id="waiting-note">殿の命令、実行中。</span></div>
+    </section>
+
+    <section id="result-controls" class="entry-controls result-controls" hidden><button id="retry" class="primary-button"><span>もう一度出陣</span><b aria-hidden="true">再戦</b></button><p class="under-button">次こそ、殿の言うとおり。</p><small class="channel-credit">くろみちch</small></section>
+
+    <div id="settings" class="modal-shade" hidden><section class="settings-panel" role="dialog" aria-modal="true" aria-labelledby="settings-title"><div class="settings-heading"><h2 id="settings-title">音の支度</h2><button id="settings-close" class="close-button" aria-label="設定を閉じる">×</button></div><label for="bgm-volume"><span>BGM <output id="bgm-output">55%</output></span><input id="bgm-volume" type="range" min="0" max="100" value="55"></label><label for="sfx-volume"><span>効果音 <output id="sfx-output">85%</output></span><input id="sfx-volume" type="range" min="0" max="100" value="85"></label><div class="sound-help"><button id="sound-test" class="small-primary sound-test">音を鳴らして戻る</button><p>消音・音量0を戻して、確認音を鳴らします。<br>iPhoneで無音なら、本体の音量・消音モードも確認。</p></div><p>合戦はひと休み。設定は今回のプレイ中のみ。</p><button id="settings-done" class="small-primary">合戦に戻る</button></section></div>
+    <div id="pause-cover" class="pause-cover" hidden><strong>しばし休戦</strong><p>画面に戻ると合戦を再開します。</p></div>
+    <p id="announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></p>
+    <noscript>このゲームを遊ぶには、ブラウザのJavaScriptを有効にしてください。</noscript>
+  </main>
+</body>
+</html>
