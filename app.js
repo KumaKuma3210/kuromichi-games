@@ -1,6 +1,6 @@
 const catalog = window.KUROMICHI_CATALOG || {games:[],links:[]};
 function element(tag,className,text){const el=document.createElement(tag);if(className)el.className=className;if(text)el.textContent=text;return el;}
-function safeLink(value){try{const url=new URL(value,location.href);return ['http:','https:','file:'].includes(url.protocol)?url.href:'#';}catch{return '#';}}
+function safeLink(value){try{const url=new URL(value,location.href);return (['http:','https:'].includes(url.protocol)||(location.protocol==='file:'&&url.protocol==='file:'))&&!url.username&&!url.password?url.href:'#';}catch{return '#';}}
 const games=document.getElementById('game-list');
 document.getElementById('game-count').textContent=catalog.games.length;document.getElementById('game-count').hidden=!catalog.games.length;
 if(!catalog.games.length){const empty=element('div','empty');const copy=element('div');copy.append(element('h3','','ゲームは準備中です')); empty.append(element('span','empty-symbol','?'),copy);games.append(empty);}
