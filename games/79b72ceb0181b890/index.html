@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f5dc8d">
+  <title>阿修羅のどっちの手？｜くろみちch</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23ffcc32'/%3E%3Ctext x='8' y='49' font-size='46'%3E拳%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="style.css">
+  <script src="core.js" defer></script>
+  <script src="audio.js" defer></script>
+  <script src="art.js" defer></script>
+  <script src="game.js" defer></script>
+</head>
+<body>
+<main id="game" aria-label="阿修羅のどっちの手？">
+  <canvas id="canvas" aria-label="玉を持つ阿修羅の腕を目で追おう"></canvas>
+  <header id="hud">
+    <div id="hearts" aria-label="残機3">♥♥♥</div>
+    <div id="score"><span>撃破</span> <b>0</b></div>
+    <button id="mute" type="button" aria-label="音をミュートする" aria-pressed="false"><svg viewBox="0 0 32 32" aria-hidden="true"><path d="M5 12h6l7-6v20l-7-6H5z"/><path class="waves" d="M22 11q6 5 0 10m4-14q10 9 0 18"/></svg></button>
+  </header>
+  <div id="targets" aria-label="回答する拳"></div>
+  <section id="title" class="screen">
+    <p class="brand">くろみちch の 反射じゃないバトル</p>
+    <h1><span>阿修羅の</span><strong>どっちの手<span class="question">？</span></strong></h1>
+    <div class="title-bottom"><p class="rule">玉の入った手を当てろ！</p><button id="start" class="primary" type="button">いざ、勝負！ <span>▶</span></button><p class="hint">拳をタップするだけ · 音あり推奨</p></div>
+  </section>
+  <section id="result" class="screen" hidden>
+    <div class="result-card"><p class="eyebrow">全 腕 敗 北</p><h2>お手上げ〜！</h2><p id="result-quip">手が多いって、ずるくない？</p><div class="stats"><div><span>撃破数</span><b id="final-score">0</b><small>体</small></div><div><span>到達した腕</span><b id="final-arms">2</b><small>本</small></div></div><p id="best"></p><button id="retry" class="primary" type="button">もう一戦！ <span>↻</span></button></div>
+  </section>
+  <footer id="caption" hidden><div id="badge"></div><strong id="message" role="status" aria-live="polite"></strong><span id="submessage"></span></footer>
+  <button id="resume" class="resume" hidden>タップして再開 ▶</button>
+</main>
+</body>
+</html>
