@@ -133,6 +133,7 @@
       const r=hands.length<=4?37:hands.length<=6?33:30;
       let mood=['pick','reveal','charge'].includes(phase)&&e.correct?'shock':['taunt','punch'].includes(phase)?'taunt':phase==='shuffle'?'busy':'smug';
       c.save();
+      if(title){const s=Math.min(1,Math.max(.65,(h-240)/420));c.translate(210,cy);c.scale(s,s);c.translate(-210,-cy);}
       if(phase==='impact'&&!this.reduced){const q=1-clamp(e.t/450);c.translate(Math.sin(e.t*.15)*10*q,Math.cos(e.t*.11)*8*q);}
       if(phase==='punch'&&!this.reduced)c.translate(Math.sin(e.t*.12)*6,Math.cos(e.t*.1)*5);
       if(['pick','reveal','charge'].includes(phase)){
@@ -186,7 +187,7 @@
         if(hands.length<=4&&phase==='answer')this.bubble('見切ったつもりか？',210,cy-162,212);
       }
       if(title){
-        c.save();c.translate(333,h*.69);c.rotate(.14);this.burst(0,0,34,46,GOLD,12);this.text('腕、',0,-10,17,INK);this.text('増えます',0,11,14,INK);c.restore();
+        c.save();c.translate(333,Math.min(h*.69,h-200));c.rotate(.14);this.burst(0,0,34,46,GOLD,12);this.text('腕、',0,-10,17,INK);this.text('増えます',0,11,14,INK);c.restore();
       }
       // Fade under the caption without obscuring any answer targets.
       if(!title){const fade=c.createLinearGradient(0,h-114,0,h);fade.addColorStop(0,'#fff4d600');fade.addColorStop(.42,'#fff0cfec');fade.addColorStop(1,'#fff0cf');c.fillStyle=fade;c.fillRect(0,h-114,420,114);}
